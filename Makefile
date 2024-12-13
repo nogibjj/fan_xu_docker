@@ -1,17 +1,29 @@
-install:
-	pip install --upgrade pip && pip install -r requirements.txt
+# Define the image name
+IMAGE_NAME = fx_image
+DOCKER_ID_USER = fanxu954
 
-format:
-	black *.py
+# Build the Docker image
+build:
+	docker build -t $(IMAGE_NAME) .
 
-#checks python files
-lint:
-	#pylint --ignore-patterns=test_*.py *.py
-	ruff check *.py
+# Run the Docker container
+run:
+	docker run -p 5000:5000 $(IMAGE_NAME)
 
-test:
-	python -m pytest -cov=script -cov=lib
-	py.test --nbval
+# Remove the Docker image
+clean:
+	docker rmi $(IMAGE_NAME)
 
-all: 
-	install format lint test
+image_show:
+	docker images
+
+container_show:
+	docker ps
+
+push:
+	docker login
+	docker tag $(IMAGE_NAME) $(DOCKER_ID_USER)/$(IMAGE_NAME)
+	docker push $(DOCKER_ID_USER)/$(IMAGE_NAME):latest
+
+login:
+	docker login -u ${DOCKER_ID_USER}
