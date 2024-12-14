@@ -9,9 +9,12 @@ COPY app.py /app
 
 # Install dependencies
 RUN pip install flask
+RUN pip install requests
 
 # Expose the application's port
 EXPOSE 5000
+
+ENV FLASK_APP=app.py
 
 # Define the command to run the application
 CMD ["python", "app.py"]
